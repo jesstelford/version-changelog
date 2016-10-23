@@ -1,0 +1,25 @@
+{
+  "name": "version-changelog",
+  "version": "0.0.0",
+  "description": "Add a version & URL to your changelog",
+  "main": "index.js",
+  "bin": "cli.js",
+  "scripts": {
+    "test": "mocha test/",
+    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md"
+  },
+  "keywords": [
+    "changelog"
+  ],
+  "author": "Jess Telford <hi+npm@jes.st> (http://jes.st)",
+  "license": "ISC",
+  "dependencies": {
+    "cross-spawn": "^4.0.2",
+    "github-url-from-git": "^1.4.0",
+    "upath": "^0.2.0"
+  },
+  "devDependencies": {
+    "changelog-verify": "^1.0.1",
+    "mocha": "^3.1.2"
+  }
+}
