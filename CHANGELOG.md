@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+- Better dogfooding
+  (add the modified `CHANGELOG.md` to git)
+- Instructions on use with
+  [`changelog-verify`](https://github.com/jesstelford/changelog-verify)
+
 ## [1.0.0][] - 2016-10-23
 
 ### Initial release
