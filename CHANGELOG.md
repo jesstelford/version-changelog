@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+## [1.0.1][] - 2016-10-23
+
 - Better dogfooding
   (add the modified `CHANGELOG.md` to git)
 - Instructions on use with
@@ -21,5 +23,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Dogfood the tool
 
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/jesstelford/version-changelog/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jesstelford/version-changelog/tree/v1.0.0
