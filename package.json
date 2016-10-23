@@ -6,7 +6,7 @@
   "bin": "cli.js",
   "scripts": {
     "test": "mocha test/",
-    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md"
+    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md"
   },
   "keywords": [
     "changelog"
