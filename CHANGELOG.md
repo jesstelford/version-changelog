@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Changed
+
+- Throw an error instead of a `console.warn` when no git repo detected. (See #1)
+
 ## [1.0.1][] - 2016-10-23
 
 - Better dogfooding

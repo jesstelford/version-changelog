@@ -31,8 +31,7 @@ function updateCompareUri(data, versionString) {
   var originUrl = spawn.sync('git', ['config', '--get', 'remote.origin.url']).stdout.toString().trim();
 
   if (!originUrl) {
-    console.warn('[WARN]: Unable to determine origin URL for adding to changelog');
-    return data;
+    throw new Error('Unable to determine origin URL for adding to changelog - ensure you have initialized a git repository');
   }
 
   var compareUrl = githubUrlFromGit(originUrl) + '/compare';
