@@ -2,8 +2,12 @@ var upath = require('upath');
 var assert = require('assert');
 var versionChangelog = require('../index');
 
+function padWithZero(num) {
+  return num < 10 ? '0' + num : num
+}
+
 const date = new Date();
-const todayDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+const todayDate = date.getFullYear() + '-' + padWithZero(date.getMonth() + 1) + '-' + padWithZero(date.getDate());
 const repoBase = 'https://github.com/jesstelford/';
 
 describe('Versioning Changelog', function() {

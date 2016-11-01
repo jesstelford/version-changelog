@@ -4,13 +4,17 @@ var fs = require('fs');
 var spawn = require('cross-spawn');
 var githubUrlFromGit = require('github-url-from-git');
 
+function dateWithLeadingZero(date) {
+  return ('0' + date).slice(-2);
+}
+
 function insertHeading(data, versionString) {
 
   var date = new Date();
 
   return data.replace(
     /(## \[Unreleased\].*)/g,
-    '$1\n\n## [' + versionString + '][] - ' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    '$1\n\n## [' + versionString + '][] - ' + date.getFullYear() + '-' + dateWithLeadingZero(date.getMonth() + 1) + '-' + dateWithLeadingZero(date.getDate())
   );
 
 }
