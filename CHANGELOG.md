@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Added
+
+- Added support for custom git tag prefixes
+
 ## [2.0.1][] - 2016-11-02
 
 ### Fixed
