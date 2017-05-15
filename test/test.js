@@ -1,6 +1,8 @@
 var upath = require('upath');
 var assert = require('assert');
 var versionChangelog = require('../index');
+var hasYarn = require('has-yarn');
+var spawn = require('cross-spawn');
 
 function padWithZero(num) {
   return num < 10 ? '0' + num : num
@@ -10,7 +12,21 @@ const date = new Date();
 const todayDate = date.getFullYear() + '-' + padWithZero(date.getMonth() + 1) + '-' + padWithZero(date.getDate());
 const repoBase = 'https://github.com/jesstelford/';
 
-describe('Versioning Changelog', function() {
+let versionPrefix = '';
+let prefixType = '';
+if (hasYarn()) {
+  versionPrefix = spawn.sync('yarn', ['config', 'get', 'version-tag-prefix']).stdout.toString().trim();
+  prefixSource = 'yarn config get version-tag-prefix';
+} else {
+  versionPrefix = spawn.sync('npm', ['config', 'get', 'tag-version-prefix']).stdout.toString().trim();
+  prefixSource = 'npm config get tag-version-prefix';
+}
+if (!versionPrefix) {
+  versionPrefix = 'v';
+  prefixSource = 'default'
+}
+
+describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
   it.skip('Handles a non-git repo correctly', function(done) {
     // TODO: Test when the `.git` folder doesn't exist
@@ -37,8 +53,8 @@ describe('Versioning Changelog', function() {
 ## [1.0.0][] - ${todayDate}
 - Foo
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/v1.0.0
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
         `.trim());
 
         done();
@@ -66,8 +82,8 @@ describe('Versioning Changelog', function() {
 
 ## [1.0.0][] - ${todayDate}
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/jesstelford/version-changelog/tree/v1.0.0
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
         `.trim());
 
         done();
@@ -103,8 +119,8 @@ describe('Versioning Changelog', function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/jesstelford/version-changelog/tree/v2.0.0
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...HEAD
+[2.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}2.0.0
         `.trim());
 
         done();

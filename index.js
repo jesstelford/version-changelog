@@ -80,3 +80,5 @@ module.exports = function versionChangelog(data, version, done) {
     done(error);
   }
 }
+
+module.exports.getVersionPrefix = getVersionPrefix;
