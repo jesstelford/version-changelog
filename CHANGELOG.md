@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+## [2.1.0][] - 2017-05-25
+
 ### Added
 
+- Add `yarn.lock` file
 - Added support for custom git tag prefixes
 
 ## [2.0.1][] - 2016-11-02
@@ -39,7 +42,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Dogfood the tool
 
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/jesstelford/version-changelog/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/jesstelford/version-changelog/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/jesstelford/version-changelog/compare/v1.0.1...v2.0.0
 [1.0.1]: https://github.com/jesstelford/version-changelog/compare/v1.0.0...v1.0.1
