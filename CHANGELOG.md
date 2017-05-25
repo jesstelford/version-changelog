@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add `yarn.lock` file
 - Added support for custom git tag prefixes
 
 ## [2.0.1][] - 2016-11-02
