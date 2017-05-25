@@ -3,6 +3,7 @@
 var fs = require('fs');
 var spawn = require('cross-spawn');
 var githubUrlFromGit = require('github-url-from-git');
+var hasYarn = require('has-yarn');
 
 function dateWithLeadingZero(date) {
   return ('0' + date).slice(-2);
@@ -19,7 +20,22 @@ function insertHeading(data, versionString) {
 
 }
 
+function getVersionPrefix() {
+  var versionPrefix = '';
+  if (hasYarn()) {
+    versionPrefix = spawn.sync('yarn', ['config', 'get', 'version-tag-prefix']).stdout.toString().trim();
+  } else {
+    versionPrefix = spawn.sync('npm', ['config', 'get', 'tag-version-prefix']).stdout.toString().trim();
+  }
+  if (!versionPrefix) {
+    versionPrefix = 'v';
+  }
+  return versionPrefix;
+}
+
 function updateCompareUri(data, versionString) {
+  
+  var versionWithPrefix = getVersionPrefix() + versionString;
 
   var unreleasedLinkPattern = /\[Unreleased\]: (.*compare\/)(.*)\.\.\.HEAD/g;
 
@@ -27,7 +43,7 @@ function updateCompareUri(data, versionString) {
 
     return data.replace(
       unreleasedLinkPattern,
-      '[Unreleased]: $1v' + versionString + '...HEAD\n[' + versionString + ']: $1$2...v' + versionString
+      '[Unreleased]: $1' + versionWithPrefix + '...HEAD\n[' + versionString + ']: $1$2...' + versionWithPrefix
     );
 
   }
@@ -39,10 +55,10 @@ function updateCompareUri(data, versionString) {
   }
 
   var compareUrl = githubUrlFromGit(originUrl) + '/compare';
-  var treeUrl = githubUrlFromGit(originUrl) + '/tree/v' + versionString;
+  var treeUrl = githubUrlFromGit(originUrl) + '/tree/' + versionWithPrefix;
 
   return data
-    + '\n\n[Unreleased]: ' + compareUrl + '/v' + versionString + '...HEAD'
+    + '\n\n[Unreleased]: ' + compareUrl + '/' + versionWithPrefix + '...HEAD'
     + '\n[' + versionString + ']: ' + treeUrl;
 
 }
@@ -64,3 +80,5 @@ module.exports = function versionChangelog(data, version, done) {
     done(error);
   }
 }
+
+module.exports.getVersionPrefix = getVersionPrefix;
