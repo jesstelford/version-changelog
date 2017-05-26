@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Fixed
+
+- Handle `null` stdout in `getVersionPrefix()`
+
 ## [2.1.0][] - 2017-05-25
 
 ### Added
