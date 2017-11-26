@@ -1,4 +1,4 @@
-# Version Changelog
+# Version Changelog [![CircleCI](https://circleci.com/gh/jesstelford/version-changelog.svg?style=svg)](https://circleci.com/gh/jesstelford/version-changelog)
 
 Add a version & URL to your `CHANGELOG.md`.
 
