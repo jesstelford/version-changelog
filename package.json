@@ -6,7 +6,8 @@
   "bin": "cli.js",
   "scripts": {
     "test": "mocha test/",
-    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md"
+    "version": "./cli.js CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md",
+    "ci": "changelog-verify --unreleased CHANGELOG.md"
   },
   "keywords": [
     "changelog"
@@ -20,7 +21,7 @@
     "upath": "^0.2.0"
   },
   "devDependencies": {
-    "changelog-verify": "^1.0.1",
+    "changelog-verify": "^1.1.0",
     "mocha": "^3.1.2"
   }
 }
