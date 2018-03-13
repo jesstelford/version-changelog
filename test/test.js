@@ -1,8 +1,13 @@
 var upath = require('upath');
 var assert = require('assert');
-var versionChangelog = require('../index');
 var hasYarn = require('has-yarn');
 var spawn = require('cross-spawn');
+var proxyquire = require('proxyquire');
+var sinon = require('sinon');
+
+var gitRemote = sinon.stub();
+
+var versionChangelog = proxyquire('../index', {'./util/git-remote': gitRemote});
 
 function padWithZero(num) {
   return num < 10 ? '0' + num : num
@@ -28,6 +33,11 @@ if (!versionPrefix) {
 
 describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
+  beforeEach(() => {
+    gitRemote.reset();
+    gitRemote.returns('git@github.com:jesstelford/version-changelog.git');
+  });
+
   it.skip('Handles a non-git repo correctly', function(done) {
     // TODO: Test when the `.git` folder doesn't exist
   });
@@ -41,7 +51,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [Unreleased][]
 - Foo
       `.trim(),
-      '1.0.0',
+      {
+        version: '1.0.0',
+      },
       function(error, data) {
 
         assert.ifError(error);
@@ -63,6 +75,130 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
   });
 
+  it('Correctly updates old unreleased sections', function(done) {
+
+    versionChangelog(
+      `
+# Changelog
+
+## [Unreleased][]
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...HEAD
+[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+
+      `.trim(),
+      {
+        version: '2.0.0',
+      },
+      function(error, data) {
+
+        assert.ifError(error);
+        assert.equal(data, `
+# Changelog
+
+## [Unreleased][]
+
+## [2.0.0][] - ${todayDate}
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...HEAD
+[2.0.0]: https://github.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...${versionPrefix}2.0.0
+[1.0.0]: https://github.com/jesstelford/version-changelog/tree/${versionPrefix}1.0.0
+        `.trim());
+
+        done();
+      }
+    );
+
+  });
+
+  it('Correctly adds a new bitbucket version', function(done) {
+
+    gitRemote.returns('git@bitbucket.org:jesstelford/version-changelog.git');
+    versionChangelog(
+      `
+# Changelog
+
+## [Unreleased][]
+- Foo
+      `.trim(),
+      {
+        version: '1.0.0',
+        repository: 'bitbucket',
+      },
+      function(error, data) {
+
+        assert.ifError(error);
+        assert.equal(data, `
+# Changelog
+
+## [Unreleased][]
+
+## [1.0.0][] - ${todayDate}
+- Foo
+
+[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+        `.trim());
+
+        done();
+      }
+    );
+
+  });
+
+  it('Correctly updates old unreleased sections with bitbucket urls', function(done) {
+
+    versionChangelog(
+      `
+# Changelog
+
+## [Unreleased][]
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+
+      `.trim(),
+      {
+        version: '2.0.0',
+        repository: 'bitbucket',
+      },
+      function(error, data) {
+
+        assert.ifError(error);
+        assert.equal(data, `
+# Changelog
+
+## [Unreleased][]
+
+## [2.0.0][] - ${todayDate}
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}2.0.0
+[2.0.0]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/${versionPrefix}2.0.0%0D${versionPrefix}1.0.0
+[1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
+        `.trim());
+
+        done();
+      }
+    );
+
+  });
+
   it('Correctly handles empty Unreleased section', function(done) {
 
     versionChangelog(
@@ -71,7 +207,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
 ## [Unreleased][]
       `.trim(),
-      '1.0.0',
+      {
+        version: '1.0.0',
+      },
       function(error, data) {
 
         assert.ifError(error);
@@ -104,7 +242,9 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
       `.trim(),
-      '2.0.0',
+      {
+        version: '2.0.0',
+      },
       function(error, data) {
 
         assert.ifError(error);
