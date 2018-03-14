@@ -101,10 +101,10 @@ const UriFunctions = {
 }
 
 
-function updateCompareUri(data, versionString, repository) {
+function updateCompareUri(data, versionString, remote) {
 
   var remoteUrl;
-  var uris = UriFunctions[repository](data, versionString);
+  var uris = UriFunctions[remote](data, versionString);
 
   if (data.match(/\[Unreleased\]:/)) {
     return data.replace(/\[Unreleased\]:.*/, uris.unreleased + '\n' + uris.previous);
@@ -115,7 +115,7 @@ function updateCompareUri(data, versionString, repository) {
     + '\n' + uris.previous;
 }
 
-module.exports = function versionChangelog(data, { version, repository }, done) {
+module.exports = function versionChangelog(data, { version, remote}, done) {
 
   try {
 
@@ -124,7 +124,7 @@ module.exports = function versionChangelog(data, { version, repository }, done) 
 
     // Update the [Unreleased] URI
     // and add the new version URI
-    data = updateCompareUri(data, version, repository ? repository : 'github');
+    data = updateCompareUri(data, version, remote ? remote : 'github');
 
     done(null, data);
 

@@ -131,7 +131,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
       `.trim(),
       {
         version: '1.0.0',
-        repository: 'bitbucket',
+        remote: 'bitbucket',
       },
       function(error, data) {
 
@@ -172,7 +172,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
       `.trim(),
       {
         version: '2.0.0',
-        repository: 'bitbucket',
+        remote: 'bitbucket',
       },
       function(error, data) {
 
