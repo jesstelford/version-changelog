@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Added
+
+- Support bitbucket repos
+
 ## [2.1.1][] - 2018-03-14
 
 ### Fixed
@@ -17,7 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - CircleCI support
 - Enforce updates to `CHANGELOG.md` for PRs
-- Support bitbucket repos
 
 ## [2.1.0][] - 2017-05-25
 
