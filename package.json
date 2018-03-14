@@ -1,6 +1,6 @@
 {
   "name": "version-changelog",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Add a version & URL to your changelog",
   "main": "index.js",
   "bin": "cli.js",

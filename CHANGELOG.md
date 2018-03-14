@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+## [3.0.0][] - 2018-03-14
+
 ### Added
 
 - Support bitbucket repos
@@ -57,7 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Dogfood the tool
 
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v2.1.1...HEAD
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/jesstelford/version-changelog/compare/v2.1.1...v3.0.0
 [2.1.1]: https://github.com/jesstelford/version-changelog/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/jesstelford/version-changelog/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/jesstelford/version-changelog/compare/v2.0.0...v2.0.1
