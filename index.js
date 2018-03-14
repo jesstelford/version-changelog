@@ -4,6 +4,7 @@ var fs = require('fs');
 var spawn = require('cross-spawn');
 var githubUrlFromGit = require('github-url-from-git');
 var bitbucketUrlFromGit = require('bitbucket-url-from-git');
+var gitlabUrlFromGit = require('giturl').parse;
 var hasYarn = require('has-yarn');
 var gitRemote = require('./util/git-remote');
 
@@ -96,8 +97,40 @@ function bitbucketUris(data, newVersion) {
   };
 }
 
+function gitlabUris(data, newVersion) {
+  var remoteUrl;
+  var previousVersion;
+  var previousLink;
+  var prefix = getVersionPrefix();
+
+  // Try get previous version and remote from unreleased tag if it exists
+  var match = /\[Unreleased\]: (.*)\/compare\/master...(.*)/g.exec(data);
+
+  if (match) {
+    remoteUrl = match[1];
+    previousVersion = match[2];
+  }
+
+  if (!remoteUrl) {
+    var remote = gitRemote();
+    remoteUrl = gitlabUrlFromGit(gitRemote());
+  }
+
+  if (previousVersion) {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/compare/' + prefix + newVersion + '...' + previousVersion;
+  } else {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/tags/' + prefix + newVersion;
+  }
+
+  return {
+    unreleased: '[Unreleased]: ' + remoteUrl + '/compare/master...' + prefix + newVersion,
+    previous: previousLink
+  };
+}
+
 const UriFunctions = {
   'github': githubUris,
+  'gitlab': gitlabUris,
   'bitbucket': bitbucketUris,
 }
 
