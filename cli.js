@@ -8,8 +8,10 @@ var minimist = require('minimist');
 
 var argv = minimist(process.argv.slice(2));
 
+var validRemotes = ['bitbucket', 'github', 'gitlab'];
+
 var fileName = argv._[0] || 'CHANGELOG.md';
-var remote = argv.remote === 'bitbucket' ? 'bitbucket' : 'github';
+var remote = validRemotes.indexOf(argv.remote) !== -1 ? argv.remote : 'github';
 
 if (!upath.isAbsolute(fileName)) {
   fileName = upath.normalize(upath.join(process.cwd(), fileName));

@@ -119,24 +119,110 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
   });
 
-  it('Correctly adds a new bitbucket version', function(done) {
+  describe('gitlab', function() {
 
-    gitRemote.returns('git@bitbucket.org:jesstelford/version-changelog.git');
-    versionChangelog(
-      `
+    it('Correctly adds a new gitlab version', function(done) {
+
+      gitRemote.returns('git@gitlab.com:jesstelford/version-changelog.git');
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
 - Foo
-      `.trim(),
-      {
-        version: '1.0.0',
-        remote: 'bitbucket',
-      },
-      function(error, data) {
+        `.trim(),
+        {
+          version: '1.0.0',
+          remote: 'gitlab',
+        },
+        function(error, data) {
 
-        assert.ifError(error);
-        assert.equal(data, `
+          assert.ifError(error);
+          assert.equal(data, `
+# Changelog
+
+## [Unreleased][]
+
+## [1.0.0][] - ${todayDate}
+- Foo
+
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+          `.trim());
+
+          done();
+        }
+      );
+
+    });
+
+    it('Correctly updates old unreleased sections with gitlab urls', function(done) {
+
+      versionChangelog(
+        `
+# Changelog
+
+## [Unreleased][]
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+
+        `.trim(),
+        {
+          version: '2.0.0',
+          remote: 'gitlab',
+        },
+        function(error, data) {
+
+          assert.ifError(error);
+          assert.equal(data, `
+# Changelog
+
+## [Unreleased][]
+
+## [2.0.0][] - ${todayDate}
+- Foo
+
+## [1.0.0][] - 2016-10-10
+- Bar
+
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}2.0.0
+[2.0.0]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...${versionPrefix}1.0.0
+[1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
+          `.trim());
+
+          done();
+        }
+      );
+
+    });
+
+  });
+
+  describe('bitbucket', function() {
+
+    it('Correctly adds a new bitbucket version', function(done) {
+
+      gitRemote.returns('git@bitbucket.org:jesstelford/version-changelog.git');
+      versionChangelog(
+        `
+# Changelog
+
+## [Unreleased][]
+- Foo
+        `.trim(),
+        {
+          version: '1.0.0',
+          remote: 'bitbucket',
+        },
+        function(error, data) {
+
+          assert.ifError(error);
+          assert.equal(data, `
 # Changelog
 
 ## [Unreleased][]
@@ -146,18 +232,18 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 
 [Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
-        `.trim());
+          `.trim());
 
-        done();
-      }
-    );
+          done();
+        }
+      );
 
-  });
+    });
 
-  it('Correctly updates old unreleased sections with bitbucket urls', function(done) {
+    it('Correctly updates old unreleased sections with bitbucket urls', function(done) {
 
-    versionChangelog(
-      `
+      versionChangelog(
+        `
 # Changelog
 
 ## [Unreleased][]
@@ -169,15 +255,15 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 [Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
 
-      `.trim(),
-      {
-        version: '2.0.0',
-        remote: 'bitbucket',
-      },
-      function(error, data) {
+        `.trim(),
+        {
+          version: '2.0.0',
+          remote: 'bitbucket',
+        },
+        function(error, data) {
 
-        assert.ifError(error);
-        assert.equal(data, `
+          assert.ifError(error);
+          assert.equal(data, `
 # Changelog
 
 ## [Unreleased][]
@@ -191,11 +277,13 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 [Unreleased]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/master%0D${versionPrefix}2.0.0
 [2.0.0]: https://bitbucket.org/jesstelford/version-changelog/branches/compare/${versionPrefix}2.0.0%0D${versionPrefix}1.0.0
 [1.0.0]: https://bitbucket.org/jesstelford/version-changelog/commits/tag/${versionPrefix}1.0.0
-        `.trim());
+          `.trim());
 
-        done();
-      }
-    );
+          done();
+        }
+      );
+
+    });
 
   });
 

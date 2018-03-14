@@ -18,6 +18,7 @@
     "bitbucket-url-from-git": "^1.0.0",
     "cross-spawn": "^4.0.2",
     "github-url-from-git": "^1.4.0",
+    "giturl": "^1.0.0",
     "has-yarn": "^1.0.0",
     "minimist": "^1.2.0",
     "upath": "^0.2.0"
