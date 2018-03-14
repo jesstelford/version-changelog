@@ -90,11 +90,13 @@ Where `<version number>` is the more recently previous release of this module.
 
 ## Options
 
-The cli takes a single optional parameter:
-the changelog filename:
+The cli takes two optional parameters:
+- the changelog filename
+- the remote code repository (github, or bitbucket - used to generate URL's for versions).
+  Default is github
 
 ```
-changelog-verify [filename]
+changelog-verify [filename] [--remote=bitbucket|github]
 ```
 
 `filename` can be a path relative to the current working directory,

@@ -3,7 +3,9 @@
 var fs = require('fs');
 var spawn = require('cross-spawn');
 var githubUrlFromGit = require('github-url-from-git');
+var bitbucketUrlFromGit = require('bitbucket-url-from-git');
 var hasYarn = require('has-yarn');
+var gitRemote = require('./util/git-remote');
 
 function dateWithLeadingZero(date) {
   return ('0' + date).slice(-2);
@@ -34,37 +36,87 @@ function getVersionPrefix() {
   return versionPrefix;
 }
 
-function updateCompareUri(data, versionString) {
-  
-  var versionWithPrefix = getVersionPrefix() + versionString;
+function githubUris(data, newVersion) {
+  var remoteUrl;
+  var previousVersion;
+  var previousLink;
+  var prefix = getVersionPrefix();
 
-  var unreleasedLinkPattern = /\[Unreleased\]: (.*compare\/)(.*)\.\.\.HEAD/g;
+  // Try get previous version and remote from unreleased tag if it exists
+  var match = /\[Unreleased\]: (.*)\/compare\/(.*)\.\.\.HEAD/g.exec(data);
 
-  if (unreleasedLinkPattern.test(data)) {
-
-    return data.replace(
-      unreleasedLinkPattern,
-      '[Unreleased]: $1' + versionWithPrefix + '...HEAD\n[' + versionString + ']: $1$2...' + versionWithPrefix
-    );
-
+  if (match) {
+    remoteUrl = match[1];
+    previousVersion = match[2];
   }
 
-  var originUrl = spawn.sync('git', ['config', '--get', 'remote.origin.url']).stdout.toString().trim();
-
-  if (!originUrl) {
-    throw new Error('Unable to determine origin URL for adding to changelog - ensure you have initialized a git repository');
+  if (!remoteUrl) {
+    remoteUrl = githubUrlFromGit(gitRemote());
   }
 
-  var compareUrl = githubUrlFromGit(originUrl) + '/compare';
-  var treeUrl = githubUrlFromGit(originUrl) + '/tree/' + versionWithPrefix;
+  if (previousVersion) {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/compare/' + previousVersion + '...' + prefix + newVersion;
+  } else {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/tree/' + prefix + newVersion;
+  }
 
-  return data
-    + '\n\n[Unreleased]: ' + compareUrl + '/' + versionWithPrefix + '...HEAD'
-    + '\n[' + versionString + ']: ' + treeUrl;
-
+  return {
+    unreleased: '[Unreleased]: ' + remoteUrl + '/compare/' + prefix + newVersion + '...HEAD',
+    previous: previousLink
+  };
 }
 
-module.exports = function versionChangelog(data, version, done) {
+function bitbucketUris(data, newVersion) {
+  var remoteUrl;
+  var previousVersion;
+  var previousLink;
+  var prefix = getVersionPrefix();
+
+  // Try get previous version and remote from unreleased tag if it exists
+  var match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
+
+  if (match) {
+    remoteUrl = match[1];
+    previousVersion = match[2];
+  }
+
+  if (!remoteUrl) {
+    remoteUrl = bitbucketUrlFromGit(gitRemote());
+  }
+
+  if (previousVersion) {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/branches/compare/' + prefix + newVersion + '%0D' + previousVersion;
+  } else {
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/commits/tag/' + prefix + newVersion;
+  }
+
+  return {
+    unreleased: '[Unreleased]: ' + remoteUrl + '/branches/compare/master%0D' + prefix + newVersion,
+    previous: previousLink
+  };
+}
+
+const UriFunctions = {
+  'github': githubUris,
+  'bitbucket': bitbucketUris,
+}
+
+
+function updateCompareUri(data, versionString, remote) {
+
+  var remoteUrl;
+  var uris = UriFunctions[remote](data, versionString);
+
+  if (data.match(/\[Unreleased\]:/)) {
+    return data.replace(/\[Unreleased\]:.*/, uris.unreleased + '\n' + uris.previous);
+  }
+
+  return data
+    + '\n\n' + uris.unreleased 
+    + '\n' + uris.previous;
+}
+
+module.exports = function versionChangelog(data, { version, remote}, done) {
 
   try {
 
@@ -73,7 +125,7 @@ module.exports = function versionChangelog(data, version, done) {
 
     // Update the [Unreleased] URI
     // and add the new version URI
-    data = updateCompareUri(data, version);
+    data = updateCompareUri(data, version, remote ? remote : 'github');
 
     done(null, data);
 

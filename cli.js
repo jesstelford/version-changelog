@@ -4,8 +4,12 @@ var fs = require('fs');
 var upath = require('upath');
 var versionChangelog = require('./index');
 var packageJson = require(upath.join(process.cwd(), 'package.json'));
+var minimist = require('minimist');
 
-var fileName = process.argv[2] || 'CHANGELOG.md';
+var argv = minimist(process.argv.slice(2));
+
+var fileName = argv._[0] || 'CHANGELOG.md';
+var remote = argv.remote === 'bitbucket' ? 'bitbucket' : 'github';
 
 if (!upath.isAbsolute(fileName)) {
   fileName = upath.normalize(upath.join(process.cwd(), fileName));
@@ -19,7 +23,7 @@ var version = packageJson.version;
 
 var data = fs.readFileSync(fileName, 'utf8');
 
-versionChangelog(data, version, function(error, data) {
+versionChangelog(data, { version: version, remote: remote }, function(error, data) {
 
   if (error) {
     console.error(error.message || error.toString());
