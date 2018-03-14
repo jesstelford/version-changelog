@@ -15,13 +15,17 @@
   "author": "Jess Telford <hi+npm@jes.st> (http://jes.st)",
   "license": "ISC",
   "dependencies": {
+    "bitbucket-url-from-git": "^1.0.0",
     "cross-spawn": "^4.0.2",
     "github-url-from-git": "^1.4.0",
     "has-yarn": "^1.0.0",
+    "minimist": "^1.2.0",
     "upath": "^0.2.0"
   },
   "devDependencies": {
     "changelog-verify": "^1.1.0",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "proxyquire": "^2.0.0",
+    "sinon": "^4.4.3"
   }
 }
