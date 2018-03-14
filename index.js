@@ -21,14 +21,15 @@ function insertHeading(data, versionString) {
 }
 
 function getVersionPrefix() {
-  var versionPrefix = '';
+  var output = null;
+  var versionPrefix = 'v';
   if (hasYarn()) {
-    versionPrefix = spawn.sync('yarn', ['config', 'get', 'version-tag-prefix']).stdout.toString().trim();
+    output = spawn.sync('yarn', ['config', 'get', 'version-tag-prefix']);
   } else {
-    versionPrefix = spawn.sync('npm', ['config', 'get', 'tag-version-prefix']).stdout.toString().trim();
+    output = spawn.sync('npm', ['config', 'get', 'tag-version-prefix']);
   }
-  if (!versionPrefix) {
-    versionPrefix = 'v';
+  if (output.stdout && !output.error) {
+    versionPrefix = output.stdout.toString().trim();
   }
   return versionPrefix;
 }

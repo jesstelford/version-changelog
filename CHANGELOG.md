@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Fixed
+
+- Handle `null` stdout in `getVersionPrefix()`
+
 ### Added
+
 - CircleCI support
 - Enforce updates to `CHANGELOG.md` for PRs
 
