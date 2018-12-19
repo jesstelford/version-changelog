@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][]
 
+### Changed
+
+- Upgrade upath package to 1.1.0
+- Upgrade meow to 5.0.0
+
 ## [3.1.0][] - 2018-03-14
 
 ### Added
