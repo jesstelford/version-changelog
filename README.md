@@ -96,7 +96,7 @@ The cli takes two optional parameters:
   generate URL's for versions). Default: `github`
 
 ```
-changelog-verify [filename] [--remote=bitbucket|gitlab|github]
+version-changelog [filename] [--remote=bitbucket|gitlab|github]
 ```
 
 `filename` can be a path relative to the current working directory,
