@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Corrected documentation on usage
 
+## [3.1.1][] - 2018-12-22
+
+### Changed
+
+- Upgrade upath package to 1.1.0
+- Upgrade meow to 5.0.0
+
 ## [3.1.0][] - 2018-03-14
 
 ### Added
@@ -69,7 +76,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Dogfood the tool
 
 
-[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/jesstelford/version-changelog/compare/v3.1.1...HEAD
+[3.1.1]: https://github.com/jesstelford/version-changelog/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/jesstelford/version-changelog/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/jesstelford/version-changelog/compare/v2.1.1...v3.0.0
 [2.1.1]: https://github.com/jesstelford/version-changelog/compare/v2.1.0...v2.1.1
