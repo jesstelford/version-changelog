@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Corrected documentation on usage
+- Fixed GitLab compare URLs
 
 ## [3.1.1][] - 2018-12-22
 

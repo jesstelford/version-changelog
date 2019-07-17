@@ -104,7 +104,7 @@ function gitlabUris(data, newVersion) {
   var prefix = getVersionPrefix();
 
   // Try get previous version and remote from unreleased tag if it exists
-  var match = /\[Unreleased\]: (.*)\/compare\/master...(.*)/g.exec(data);
+  var match = /\[Unreleased\]: (.*)\/compare\/(.*)...master/g.exec(data);
 
   if (match) {
     remoteUrl = match[1];
@@ -117,13 +117,13 @@ function gitlabUris(data, newVersion) {
   }
 
   if (previousVersion) {
-    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/compare/' + prefix + newVersion + '...' + previousVersion;
+    previousLink = '[' + newVersion + ']: ' + remoteUrl + '/compare/' + previousVersion + '...' + prefix + newVersion;
   } else {
     previousLink = '[' + newVersion + ']: ' + remoteUrl + '/tags/' + prefix + newVersion;
   }
 
   return {
-    unreleased: '[Unreleased]: ' + remoteUrl + '/compare/master...' + prefix + newVersion,
+    unreleased: '[Unreleased]: ' + remoteUrl + '/compare/' + prefix + newVersion + '...master',
     previous: previousLink
   };
 }
