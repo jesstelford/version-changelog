@@ -146,7 +146,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - ${todayDate}
 - Foo
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...master
 [1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
           `.trim());
 
@@ -168,7 +168,7 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...master
 [1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
 
         `.trim(),
@@ -190,8 +190,8 @@ describe(`Versioning Changelog (prefix source: "${prefixSource}")`, function() {
 ## [1.0.0][] - 2016-10-10
 - Bar
 
-[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/master...${versionPrefix}2.0.0
-[2.0.0]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...${versionPrefix}1.0.0
+[Unreleased]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}2.0.0...master
+[2.0.0]: http://gitlab.com/jesstelford/version-changelog/compare/${versionPrefix}1.0.0...${versionPrefix}2.0.0
 [1.0.0]: http://gitlab.com/jesstelford/version-changelog/tags/${versionPrefix}1.0.0
           `.trim());
 
