@@ -1,13 +1,11 @@
 #!/usr/bin/env node
 
 // @ts-expect-error - Dependency lacks type definitions
-import bitbucketUrlFromGit from "bitbucket-url-from-git";
-// @ts-expect-error - Dependency lacks type definitions
 import { parse as gitlabUrlFromGit } from "giturl";
 import gitRemote from "./git-remote.js";
 import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
 import { formatDate } from "./format-date.js";
-import { GitHub } from "./remote.js";
+import { Bitbucket, GitHub } from "./remote.js";
 
 /**
  * Replaces the "Unreleased" heading with a new version heading including the date.
@@ -64,7 +62,7 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
  * @returns The Bitbucket URLs for the unreleased and previous versions
  */
 function bitbucketUris(data: string, newVersion: string, prefix: string): UriResult {
-  let remoteUrl: string | undefined;
+  let remote: Bitbucket | undefined;
   let previousVersion: string | undefined;
   let previousLink: string;
 
@@ -72,23 +70,18 @@ function bitbucketUris(data: string, newVersion: string, prefix: string): UriRes
   const match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
 
   if (match) {
-    remoteUrl = match[1];
+    remote = Bitbucket.fromBrowserUrl(match[1]);
     previousVersion = match[2];
   }
 
-  if (!remoteUrl) {
-    remoteUrl = bitbucketUrlFromGit(gitRemote());
+  if (!remote) {
+    remote = Bitbucket.fromGitUrl(gitRemote());
   }
 
-  if (previousVersion) {
-    previousLink =
-      "[" + newVersion + "]: " + remoteUrl + "/branches/compare/" + prefix + newVersion + "%0D" + previousVersion;
-  } else {
-    previousLink = "[" + newVersion + "]: " + remoteUrl + "/commits/tag/" + prefix + newVersion;
-  }
+  previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);
 
   return {
-    unreleased: "[Unreleased]: " + remoteUrl + "/branches/compare/master%0D" + prefix + newVersion,
+    unreleased: "[Unreleased]: " + remote.getChangesUrl(prefix + newVersion, null),
     previous: previousLink,
   };
 }

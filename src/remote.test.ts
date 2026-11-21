@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { GitHub } from "./remote.js";
+import { Bitbucket, GitHub } from "./remote.js";
 
 describe("GitHub", () => {
   describe("fromUrl", () => {
@@ -64,13 +64,13 @@ describe("GitHub", () => {
     });
 
     it("should parse https://github.com/nstringham/update-changelog-version/tree/v1.0.0", () => {
-      const gitUrl = "https://github.com/nstringham/update-changelog-version/tree/v1.0.0";
-      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
+      const url = "https://github.com/nstringham/update-changelog-version/tree/v1.0.0";
+      expect(GitHub.fromUrl(url).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
     });
 
     it("should parse https://github.com/nstringham/update-changelog-version/compare/v1.0.0...HEAD", () => {
-      const gitUrl = "https://github.com/nstringham/update-changelog-version/compare/v1.0.0...HEAD";
-      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
+      const url = "https://github.com/nstringham/update-changelog-version/compare/v1.0.0...HEAD";
+      expect(GitHub.fromUrl(url).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
     });
   });
 
@@ -93,6 +93,110 @@ describe("GitHub", () => {
       const github = new GitHub("nstringham", "update-changelog-version");
       expect(github.getChangesUrl("v1.0.0", "v1.0.1")).toBe(
         "https://github.com/nstringham/update-changelog-version/compare/v1.0.0...v1.0.1",
+      );
+    });
+  });
+});
+
+describe("Bitbucket", () => {
+  describe("fromGitUrl", () => {
+    it("should support git://*", () => {
+      const gitUrl = "git@bitbucket.org:alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should support git://*.git", () => {
+      const gitUrl = "git://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should support https://*", () => {
+      const gitUrl = "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should support https://*.git", () => {
+      const gitUrl = "https://alex@bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should throw error on failure", () => {
+      const gitUrl = "git://bitbucket.org/alex-e-leon/.git";
+      expect(() => Bitbucket.fromGitUrl(gitUrl)).toThrow("Invalid Bitbucket URL");
+    });
+
+    it("should parse git@bitbucket.org:/alex-e-leon/node-bitbucket-url-from-git.git", () => {
+      const gitUrl = "git@bitbucket.org:/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should parse git@github.com:bcoe/thumbd.git#2.7.0", () => {
+      const gitUrl = "git@bitbucket.org:alex-e-leon/node-bitbucket-url-from-git.git#2.7.0";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should parse git+https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git", () => {
+      const gitUrl = "git+https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it("should parse git+ssh://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git", () => {
+      const gitUrl = "git+ssh://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
+    it.skip("should parse git@ssh.bitbucket.org:nstringham/update-changelog-version.git", () => {
+      const gitUrl = "git@ssh.bitbucket.org:nstringham/update-changelog-version.git";
+      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version",
+      );
+    });
+  });
+
+  describe("fromBrowserUrl", () => {
+    it("should parse https://bitbucket.org/nstringham/update-changelog-version", () => {
+      const url = "https://bitbucket.org/nstringham/update-changelog-version";
+      expect(Bitbucket.fromBrowserUrl(url).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version",
+      );
+    });
+  });
+
+  describe("getChangesUrl", () => {
+    it("should return a tag url when the base is null", () => {
+      const bitbucket = new Bitbucket("nstringham", "update-changelog-version");
+      expect(bitbucket.getChangesUrl(null, "v1.0.0")).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version/commits/tag/v1.0.0",
+      );
+    });
+
+    it("should compare to master when compare is null", () => {
+      const bitbucket = new Bitbucket("nstringham", "update-changelog-version");
+      expect(bitbucket.getChangesUrl("v1.0.0", null)).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version/branches/compare/master%0Dv1.0.0",
+      );
+    });
+
+    it("should compare compare to base when both base and compare are not null", () => {
+      const bitbucket = new Bitbucket("nstringham", "update-changelog-version");
+      expect(bitbucket.getChangesUrl("v1.0.0", "v1.0.1")).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version/branches/compare/v1.0.1%0Dv1.0.0",
       );
     });
   });
