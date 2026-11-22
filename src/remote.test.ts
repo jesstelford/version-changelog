@@ -155,7 +155,7 @@ describe("Bitbucket", () => {
       );
     });
 
-    it("should parse git@github.com:bcoe/thumbd.git#2.7.0", () => {
+    it("should parse git@bitbucket.org:bcoe/thumbd.git#2.7.0", () => {
       const gitUrl = "git@bitbucket.org:alex-e-leon/node-bitbucket-url-from-git.git#2.7.0";
       expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
