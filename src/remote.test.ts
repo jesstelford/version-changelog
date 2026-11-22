@@ -161,6 +161,13 @@ describe("Bitbucket", () => {
       );
     });
 
+    it("should parse git+ssh://altssh.bitbucket.org:433/alex-e-leon/node-bitbucket-url-from-git.git", () => {
+      const gitUrl = "git+ssh://altssh.bitbucket.org:433/alex-e-leon/node-bitbucket-url-from-git.git";
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
+      );
+    });
+
     it("should parse git@ssh.bitbucket.org:nstringham/update-changelog-version.git", () => {
       const gitUrl = "git@ssh.bitbucket.org:nstringham/update-changelog-version.git";
       expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
