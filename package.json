@@ -33,7 +33,6 @@
     "prepack": "pnpm run build"
   },
   "dependencies": {
-    "bitbucket-url-from-git": "^1.0.2",
     "giturl": "^1.0.0"
   },
   "devDependencies": {

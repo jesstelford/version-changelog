@@ -99,80 +99,78 @@ describe("GitHub", () => {
 });
 
 describe("Bitbucket", () => {
-  describe("fromGitUrl", () => {
+  describe("fromUrl", () => {
     it("should support git://*", () => {
       const gitUrl = "git@bitbucket.org:alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should support git://*.git", () => {
       const gitUrl = "git://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should support https://*", () => {
       const gitUrl = "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should support https://*.git", () => {
       const gitUrl = "https://alex@bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should throw error on failure", () => {
       const gitUrl = "git://bitbucket.org/alex-e-leon/.git";
-      expect(() => Bitbucket.fromGitUrl(gitUrl)).toThrow("Invalid Bitbucket URL");
+      expect(() => Bitbucket.fromUrl(gitUrl)).toThrow("Invalid Bitbucket URL");
     });
 
     it("should parse git@bitbucket.org:/alex-e-leon/node-bitbucket-url-from-git.git", () => {
       const gitUrl = "git@bitbucket.org:/alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should parse git@github.com:bcoe/thumbd.git#2.7.0", () => {
       const gitUrl = "git@bitbucket.org:alex-e-leon/node-bitbucket-url-from-git.git#2.7.0";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should parse git+https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git", () => {
       const gitUrl = "git+https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
     it("should parse git+ssh://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git", () => {
       const gitUrl = "git+ssh://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
     });
 
-    it.skip("should parse git@ssh.bitbucket.org:nstringham/update-changelog-version.git", () => {
+    it("should parse git@ssh.bitbucket.org:nstringham/update-changelog-version.git", () => {
       const gitUrl = "git@ssh.bitbucket.org:nstringham/update-changelog-version.git";
-      expect(Bitbucket.fromGitUrl(gitUrl).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/nstringham/update-changelog-version",
       );
     });
-  });
 
-  describe("fromBrowserUrl", () => {
     it("should parse https://bitbucket.org/nstringham/update-changelog-version", () => {
       const url = "https://bitbucket.org/nstringham/update-changelog-version";
-      expect(Bitbucket.fromBrowserUrl(url).getRepositoryUrl()).toBe(
+      expect(Bitbucket.fromUrl(url).getRepositoryUrl()).toBe(
         "https://bitbucket.org/nstringham/update-changelog-version",
       );
     });

@@ -1,6 +1,3 @@
-// @ts-expect-error - Dependency lacks type definitions
-import bitbucketUrlFromGit from "bitbucket-url-from-git";
-
 export type BrowserUrl = `https://${string}`;
 
 export interface Remote {
@@ -58,15 +55,7 @@ export class Bitbucket implements Remote {
     this.repo = repo;
   }
 
-  static fromGitUrl(url: string): Bitbucket {
-    const browserUrl = bitbucketUrlFromGit(url);
-    if (browserUrl == null) {
-      throw new Error(`Invalid Bitbucket URL: ${url}`);
-    }
-    return Bitbucket.fromBrowserUrl(browserUrl);
-  }
-
-  static fromBrowserUrl(url: string): Bitbucket {
+  static fromUrl(url: string): Bitbucket {
     const match = url?.match(/bitbucket\.org(?::[0-9]*)?\/?(?<workspace>[^/.]+)\/(?<repo>[^/.]+)/);
     if (match?.groups?.workspace === undefined || match?.groups?.repo === undefined) {
       throw new Error(`Invalid Bitbucket URL: ${url}`);

@@ -207,9 +207,6 @@ importers:
 
   .:
     dependencies:
-      bitbucket-url-from-git:
-        specifier: ^1.0.2
-        version: 1.0.2
       giturl:
         specifier: ^1.0.0
         version: 1.0.0
@@ -814,9 +811,6 @@ packages:
 
   ast-v8-to-istanbul@1.0.7:
     resolution: {integrity: sha512-kFL68AG6ajd8fg248zwM9GQrUWEp79gsmjum34OEXjs4yHuUMZfYKwOLW9GMmB4oNvVrj+EAGxsP7ye2UR9UlA==}
-
-  bitbucket-url-from-git@1.0.2:
-    resolution: {integrity: sha512-BbFzr5mqFe1fdGLz+phZSPEaWoBgLeqWnQ7uB0jPl6Ytcj4/c2E9witwa/P91DCgGiTfLBahn56VCOfjQFuSXQ==}
 
   chai@6.3.0:
     resolution: {integrity: sha512-XWAtwJ6OHO+tj0EKCs0Y2UamnyOxseZWltU4x2U2wh8g4AigdjwvtUjvLP2tqkA/avxHEtzxNaqGq/YGNwckKg==}
@@ -1435,8 +1429,6 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       estree-walker: 3.0.3
       js-tokens: 10.0.0
-
-  bitbucket-url-from-git@1.0.2: {}
 
   chai@6.3.0: {}
 

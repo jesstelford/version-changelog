@@ -70,12 +70,12 @@ function bitbucketUris(data: string, newVersion: string, prefix: string): UriRes
   const match = /\[Unreleased\]: (.*)\/branches\/compare\/master%0D(.*)/g.exec(data);
 
   if (match) {
-    remote = Bitbucket.fromBrowserUrl(match[1]);
+    remote = Bitbucket.fromUrl(match[1]);
     previousVersion = match[2];
   }
 
   if (!remote) {
-    remote = Bitbucket.fromGitUrl(gitRemote());
+    remote = Bitbucket.fromUrl(gitRemote());
   }
 
   previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);
