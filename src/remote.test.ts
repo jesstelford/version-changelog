@@ -28,6 +28,11 @@ describe("GitHub", () => {
       expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/my.team/my.repo");
     });
 
+    it("should allow trailing slash after .git", () => {
+      const gitUrl = "https://github.com/nstringham/update-changelog-version.git/";
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
+    });
+
     it("should throw error on failure", () => {
       const gitUrl = "git://github.com/justgord/.git";
       expect(() => GitHub.fromUrl(gitUrl)).toThrow("Invalid GitHub URL");
@@ -141,6 +146,13 @@ describe("Bitbucket", () => {
     it("should preserve dots in repository names", () => {
       const gitUrl = "https://bitbucket.org/my.team/my.repo.git";
       expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://bitbucket.org/my.team/my.repo");
+    });
+
+    it("should allow trailing slash after .git", () => {
+      const gitUrl = "https://bitbucket.org/nstringham/update-changelog-version.git/";
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
+        "https://bitbucket.org/nstringham/update-changelog-version",
+      );
     });
 
     it("should throw error on failure", () => {
