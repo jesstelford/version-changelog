@@ -24,7 +24,8 @@ export class GitHub implements Remote {
   }
 
   static fromUrl(url: string): GitHub {
-    const match = url?.match(/github\.com(?::[0-9]*)?\/?(?<owner>[^/.]+)\/(?<repo>[^/.]+)/);
+    const normalizedUrl = url.replace(/\.git(?:#.*)?$/, "");
+    const match = normalizedUrl?.match(/github\.com(?::[0-9]*)?\/?(?<owner>[^/]+)\/(?<repo>[^/]+)/);
     if (match?.groups?.owner === undefined || match?.groups?.repo === undefined) {
       throw new Error(`Invalid GitHub URL: ${url}`);
     }
@@ -56,7 +57,8 @@ export class Bitbucket implements Remote {
   }
 
   static fromUrl(url: string): Bitbucket {
-    const match = url?.match(/bitbucket\.org(?::[0-9]*)?\/?(?<workspace>[^/.]+)\/(?<repo>[^/.]+)/);
+    const normalizedUrl = url.replace(/\.git(?:#.*)?$/, "");
+    const match = normalizedUrl?.match(/bitbucket\.org(?::[0-9]*)?\/?(?<workspace>[^/]+)\/(?<repo>[^/]+)/);
     if (match?.groups?.workspace === undefined || match?.groups?.repo === undefined) {
       throw new Error(`Invalid Bitbucket URL: ${url}`);
     }

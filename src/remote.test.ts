@@ -23,6 +23,11 @@ describe("GitHub", () => {
       expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/banchee/tranquil");
     });
 
+    it("should preserve dots in repository names", () => {
+      const gitUrl = "https://github.com/my.team/my.repo.git";
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/my.team/my.repo");
+    });
+
     it("should throw error on failure", () => {
       const gitUrl = "git://github.com/justgord/.git";
       expect(() => GitHub.fromUrl(gitUrl)).toThrow("Invalid GitHub URL");
@@ -126,6 +131,11 @@ describe("Bitbucket", () => {
       expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
+    });
+
+    it("should preserve dots in repository names", () => {
+      const gitUrl = "https://bitbucket.org/my.team/my.repo.git";
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://bitbucket.org/my.team/my.repo");
     });
 
     it("should throw error on failure", () => {
