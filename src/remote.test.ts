@@ -68,6 +68,11 @@ describe("GitHub", () => {
       expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
     });
 
+    it("should preserve leading digits in owner names", () => {
+      const gitUrl = "git@github.com:123team/project.git";
+      expect(GitHub.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://github.com/123team/project");
+    });
+
     it("should parse https://github.com/nstringham/update-changelog-version/tree/v1.0.0", () => {
       const url = "https://github.com/nstringham/update-changelog-version/tree/v1.0.0";
       expect(GitHub.fromUrl(url).getRepositoryUrl()).toBe("https://github.com/nstringham/update-changelog-version");
@@ -176,6 +181,11 @@ describe("Bitbucket", () => {
       expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe(
         "https://bitbucket.org/alex-e-leon/node-bitbucket-url-from-git",
       );
+    });
+
+    it("should preserve leading digits in workspace names", () => {
+      const gitUrl = "git@bitbucket.org:123team/project.git";
+      expect(Bitbucket.fromUrl(gitUrl).getRepositoryUrl()).toBe("https://bitbucket.org/123team/project");
     });
 
     it("should parse git@ssh.bitbucket.org:nstringham/update-changelog-version.git", () => {
