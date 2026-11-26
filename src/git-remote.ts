@@ -14,10 +14,11 @@ export function isGitUrl(url: string): url is GitUrl {
 
 /**
  * Gets the URL of the git remote origin
+ * @param cwd The directory to discover git remotes in
  * @returns The URL of the git remote origin
  */
-export default function gitRemote(): GitUrl {
-  const remoteUrl = runCommand("git config --get remote.origin.url");
+export default function gitRemote(cwd: string): GitUrl {
+  const remoteUrl = runCommand("git config --get remote.origin.url", cwd);
 
   if (!remoteUrl) {
     throw new Error(

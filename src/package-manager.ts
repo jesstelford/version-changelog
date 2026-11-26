@@ -82,8 +82,8 @@ const VERSION_PREFIX_COMMANDS = {
 } as const satisfies { [key in PackageManager]: string };
 
 /** Gets the version prefix configured for a given package manger */
-export function getVersionPrefix(packageManager: PackageManager): string {
-  const output = runCommand(VERSION_PREFIX_COMMANDS[packageManager]);
+export function getVersionPrefix(packageManager: PackageManager, cwd: string): string {
+  const output = runCommand(VERSION_PREFIX_COMMANDS[packageManager], cwd);
   if (output === "" || output === String(undefined)) {
     return "v";
   }

@@ -43,7 +43,7 @@ function githubUris(data: string, newVersion: string, prefix: string): UriResult
   }
 
   if (!remote) {
-    remote = GitHub.fromUrl(gitRemote());
+    remote = GitHub.fromUrl(gitRemote(process.cwd()));
   }
 
   previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);
@@ -75,7 +75,7 @@ function bitbucketUris(data: string, newVersion: string, prefix: string): UriRes
   }
 
   if (!remote) {
-    remote = Bitbucket.fromUrl(gitRemote());
+    remote = Bitbucket.fromUrl(gitRemote(process.cwd()));
   }
 
   previousLink = "[" + newVersion + "]: " + remote.getChangesUrl(previousVersion ?? null, prefix + newVersion);
@@ -107,7 +107,7 @@ function gitlabUris(data: string, newVersion: string, prefix: string): UriResult
   }
 
   if (!remoteUrl) {
-    remoteUrl = gitlabUrlFromGit(gitRemote());
+    remoteUrl = gitlabUrlFromGit(gitRemote(process.cwd()));
   }
 
   if (previousVersion) {
@@ -139,7 +139,7 @@ type Remote = keyof typeof UriFunctions;
  */
 async function updateCompareUri(data: string, versionString: string, remote: Remote): Promise<string> {
   const packageManager = await detectPackageManager(process.cwd());
-  const prefix = getVersionPrefix(packageManager);
+  const prefix = getVersionPrefix(packageManager, process.cwd());
   const uris = UriFunctions[remote](data, versionString, prefix);
 
   if (data.match(/\[Unreleased\]:/)) {

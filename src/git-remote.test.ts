@@ -27,20 +27,20 @@ describe("gitRemote", () => {
   it("should get remote.origin.url from the git config", () => {
     vi.mocked(runCommand).mockReturnValue("https://github.com/user/repo.git");
 
-    expect(gitRemote()).toBe("https://github.com/user/repo.git");
+    expect(gitRemote("cwd")).toBe("https://github.com/user/repo.git");
 
-    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("git config --get remote.origin.url");
+    expect(vi.mocked(runCommand)).toHaveBeenCalledExactlyOnceWith("git config --get remote.origin.url", "cwd");
   });
 
   it("should throw an error if no remote is configured", () => {
     vi.mocked(runCommand).mockReturnValue("");
 
-    expect(() => gitRemote()).toThrow();
+    expect(() => gitRemote("cwd")).toThrow();
   });
 
   it("should throw an error if the remote URL is invalid", () => {
     vi.mocked(runCommand).mockReturnValue("invalid-url");
 
-    expect(() => gitRemote()).toThrow();
+    expect(() => gitRemote("cwd")).toThrow();
   });
 });
