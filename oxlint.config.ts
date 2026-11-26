@@ -12,5 +12,6 @@ export default defineConfig({
     curly: "warn",
     eqeqeq: ["warn", "smart"],
     "no-var": "warn",
+    "unicorn/prefer-node-protocol": "warn",
   },
 });
