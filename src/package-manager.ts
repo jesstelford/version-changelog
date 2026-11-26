@@ -1,6 +1,7 @@
-import { access, readFile } from "node:fs/promises";
+import { access } from "node:fs/promises";
 import { join } from "node:path";
 import { runCommand } from "./run-command.js";
+import { readPackageFile } from "./package-metadata.js";
 
 const PACKAGE_MANAGERS = ["npm", "yarn", "pnpm"] as const;
 
@@ -30,10 +31,13 @@ async function exists(path: string): Promise<boolean> {
  * @param cwd - The directory to check for the package manager
  */
 export async function detectPackageManager(cwd: string): Promise<PackageManager> {
-  const packageJson = JSON.parse(await readFile(join(cwd, "package.json"), "utf-8"));
-  const packageManager = getPackageManagerFromPackageJson(packageJson);
-  if (packageManager != null) {
-    return packageManager;
+  const { packageManager } = await readPackageFile(cwd);
+  if (packageManager !== undefined) {
+    if (isPackageManager(packageManager)) {
+      return packageManager;
+    } else {
+      console.warn(`Unknown package manager: ${JSON.stringify(packageManager)}`);
+    }
   }
 
   if (await exists(join(cwd, "pnpm-lock.yaml"))) {
@@ -43,36 +47,6 @@ export async function detectPackageManager(cwd: string): Promise<PackageManager>
     return "yarn";
   }
   return "npm";
-}
-
-/** Gets the name of the package manager from package.json */
-function getPackageManagerFromPackageJson(packageJson: Record<string, unknown>): PackageManager | null {
-  if ("packageManager" in packageJson && typeof packageJson.packageManager === "string") {
-    const packageManager = packageJson.packageManager.split("@")[0];
-    if (isPackageManager(packageManager)) {
-      return packageManager;
-    } else {
-      console.warn(`Unknown package manager: ${packageManager}`);
-    }
-  }
-  if (
-    "devEngines" in packageJson &&
-    typeof packageJson.devEngines === "object" &&
-    packageJson.devEngines != null &&
-    "packageManager" in packageJson.devEngines &&
-    typeof packageJson.devEngines.packageManager === "object" &&
-    packageJson.devEngines.packageManager != null &&
-    "name" in packageJson.devEngines.packageManager &&
-    typeof packageJson.devEngines.packageManager.name === "string"
-  ) {
-    const packageManager = packageJson.devEngines.packageManager.name;
-    if (isPackageManager(packageManager)) {
-      return packageManager;
-    } else {
-      console.warn(`Unknown package manager: ${packageManager}`);
-    }
-  }
-  return null;
 }
 
 const VERSION_PREFIX_COMMANDS = {

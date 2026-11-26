@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import fs from "fs";
+import { readFile, writeFile } from "node:fs/promises";
 import versionChangelog from "./index.js";
 import { parseArgs } from "node:util";
-import { join, resolve } from "node:path";
+import { resolve } from "node:path";
+import { readPackageFile } from "./package-metadata.js";
 
-const packageJson = require(join(process.cwd(), "package.json"));
+const packageMetadata = await readPackageFile(process.cwd());
 
 const { values, positionals } = parseArgs({
   args: process.argv.slice(2),
@@ -26,10 +27,10 @@ const remote = isValidRemote(values.remote) ? values.remote : "github";
 // When run as part of the `"version"` script
 // (for example by `npm release`)
 // it will be the _new_ version
-const version = packageJson.version;
+const version = packageMetadata.version;
 
-const changelog = fs.readFileSync(fileName, "utf8");
+const changelog = await readFile(fileName, "utf8");
 
 const updatedChangelog = await versionChangelog(changelog, { version: version, remote: remote });
 
-fs.writeFileSync(fileName, updatedChangelog, "utf8");
+await writeFile(fileName, updatedChangelog, "utf8");

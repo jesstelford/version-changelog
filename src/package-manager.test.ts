@@ -1,10 +1,10 @@
 import { describe, it, beforeEach, expect, vi } from "vitest";
 import { detectPackageManager, getVersionPrefix } from "./package-manager.js";
-import { readFile, access } from "node:fs/promises";
+import { access } from "node:fs/promises";
+import { readPackageFile } from "./package-metadata.js";
 import { runCommand } from "./run-command.js";
 
 vi.mock(import("node:fs/promises"), () => ({
-  readFile: vi.fn(),
   access: vi.fn(),
 }));
 
@@ -16,13 +16,17 @@ vi.mock(import("node:path"), async (importOriginal) => {
   };
 });
 
+vi.mock(import("./package-metadata.js"), () => ({
+  readPackageFile: vi.fn(),
+}));
+
 vi.mock(import("./run-command.js"), () => ({
   runCommand: vi.fn(),
 }));
 
 describe("detectPackageManager", () => {
   beforeEach(() => {
-    vi.mocked(readFile).mockReset().mockResolvedValue(JSON.stringify({}));
+    vi.mocked(readPackageFile).mockReset().mockResolvedValue({ version: "1.0.0" });
     vi.mocked(access).mockReset().mockRejectedValue(new Error("File does not exist"));
   });
 
@@ -33,25 +37,11 @@ describe("detectPackageManager", () => {
   it("uses packageManager from package file", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ packageManager: "yarn@1.22.0" }));
+    vi.mocked(readPackageFile).mockResolvedValue({ version: "1.0.0", packageManager: "yarn" });
 
     expect(await detectPackageManager("cwd")).toBe("yarn");
 
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ packageManager: "pnpm@11.25.0" }));
-
-    expect(await detectPackageManager("cwd")).toBe("pnpm");
-
-    expect(warn).not.toHaveBeenCalled();
-  });
-
-  it("uses devEngines from package file", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ devEngines: { packageManager: { name: "yarn" } } }));
-
-    expect(await detectPackageManager("cwd")).toBe("yarn");
-
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ devEngines: { packageManager: { name: "pnpm" } } }));
+    vi.mocked(readPackageFile).mockResolvedValue({ version: "1.0.0", packageManager: "pnpm" });
 
     expect(await detectPackageManager("cwd")).toBe("pnpm");
 
@@ -61,19 +51,11 @@ describe("detectPackageManager", () => {
   it("ignores unknown package managers", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ packageManager: "unknown@1.0.0" }));
+    vi.mocked(readPackageFile).mockResolvedValue({ version: "1.0.0", packageManager: "unknown" });
 
     expect(await detectPackageManager("cwd")).toBe("npm");
 
-    expect(warn).toHaveBeenCalledExactlyOnceWith("Unknown package manager: unknown");
-
-    warn.mockClear();
-
-    vi.mocked(readFile).mockResolvedValue(JSON.stringify({ devEngines: { packageManager: { name: "unknown" } } }));
-
-    expect(await detectPackageManager("cwd")).toBe("npm");
-
-    expect(warn).toHaveBeenCalledExactlyOnceWith("Unknown package manager: unknown");
+    expect(warn).toHaveBeenCalledExactlyOnceWith('Unknown package manager: "unknown"');
   });
 
   it("implies pnpm from pnpm lock file", async () => {
