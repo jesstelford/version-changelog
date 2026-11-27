@@ -154,6 +154,12 @@ describe("parsePackageMetadata", () => {
       "Invalid package.json: devEngines.packageManager.name must be a string",
     );
   });
+
+  it("allows devEngines without a packageManager", () => {
+    expect(
+      parsePackageMetadata({ version: "1.0.0", devEngines: { runtime: { name: "node", version: ">=26" } } }),
+    ).toEqual({ version: "1.0.0" });
+  });
 });
 
 describe("readPackageFile", () => {
