@@ -1,6 +1,5 @@
-import { beforeEach, describe, it, vi } from "vitest";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 
-import assert from "node:assert";
 import { formatDate } from "./format-date.js";
 import gitRemote from "./git-remote.js";
 
@@ -35,8 +34,7 @@ describe("Versioning Changelog", function () {
       },
     );
 
-    assert.equal(
-      data,
+    expect(data).toBe(
       `
 # Changelog
 
@@ -71,8 +69,7 @@ describe("Versioning Changelog", function () {
       },
     );
 
-    assert.equal(
-      data,
+    expect(data).toBe(
       `
 # Changelog
 
@@ -107,8 +104,7 @@ describe("Versioning Changelog", function () {
         },
       );
 
-      assert.equal(
-        data,
+      expect(data).toBe(
         `
 # Changelog
 
@@ -143,8 +139,7 @@ describe("Versioning Changelog", function () {
         },
       );
 
-      assert.equal(
-        data,
+      expect(data).toBe(
         `
 # Changelog
 
@@ -180,8 +175,7 @@ describe("Versioning Changelog", function () {
         },
       );
 
-      assert.equal(
-        data,
+      expect(data).toBe(
         `
 # Changelog
 
@@ -217,8 +211,7 @@ describe("Versioning Changelog", function () {
         },
       );
 
-      assert.equal(
-        data,
+      expect(data).toBe(
         `
 # Changelog
 
@@ -250,8 +243,7 @@ describe("Versioning Changelog", function () {
       },
     );
 
-    assert.equal(
-      data,
+    expect(data).toBe(
       `
 # Changelog
 
@@ -281,8 +273,7 @@ describe("Versioning Changelog", function () {
       },
     );
 
-    assert.equal(
-      data,
+    expect(data).toBe(
       `
 # Changelog
 
