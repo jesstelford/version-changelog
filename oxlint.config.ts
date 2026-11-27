@@ -13,5 +13,6 @@ export default defineConfig({
     eqeqeq: ["warn", "smart"],
     "no-var": "warn",
     "unicorn/prefer-node-protocol": "warn",
+    "unicorn/text-encoding-identifier-case": "warn",
   },
 });

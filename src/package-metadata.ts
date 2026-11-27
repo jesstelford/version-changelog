@@ -80,7 +80,7 @@ export async function readPackageFile(cwd: string): Promise<Readonly<PackageMeta
     return packageMetadataCache.get(cwd)!;
   }
 
-  const packageJson = await readFile(join(cwd, "package.json"), "utf-8");
+  const packageJson = await readFile(join(cwd, "package.json"), "utf8");
 
   const metadata = parsePackageMetadata(JSON.parse(packageJson));
 

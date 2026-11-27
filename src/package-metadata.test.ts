@@ -171,7 +171,7 @@ describe("readPackageFile", () => {
     await readPackageFile("cwd1");
 
     expect(readFile).toHaveBeenCalledTimes(2);
-    expect(readFile).toHaveBeenNthCalledWith(1, "cwd1/package.json", "utf-8");
-    expect(readFile).toHaveBeenNthCalledWith(2, "cwd2/package.json", "utf-8");
+    expect(readFile).toHaveBeenNthCalledWith(1, "cwd1/package.json", "utf8");
+    expect(readFile).toHaveBeenNthCalledWith(2, "cwd2/package.json", "utf8");
   });
 });

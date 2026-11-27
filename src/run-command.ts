@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 /**
  * Run a shell command synchronously and return the result
@@ -8,5 +8,5 @@ import { execSync } from "child_process";
  * @throws If the command fails
  */
 export function runCommand(command: string, cwd: string): string {
-  return execSync(command, { cwd, encoding: "utf-8", windowsHide: true }).trim();
+  return execSync(command, { cwd, encoding: "utf8", windowsHide: true }).trim();
 }

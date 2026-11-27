@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, vi } from "vitest";
 
-import assert from "assert";
+import assert from "node:assert";
 import { formatDate } from "./format-date.js";
 import gitRemote from "./git-remote.js";
 
